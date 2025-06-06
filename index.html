@@ -1,824 +1,819 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>我的个人博客</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@400;600&display=swap"
-      rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:
+        wght@400;700&family=Raleway:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/
+        font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-      /* 全局样式 */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
-        line-height: 1.8;
-        color: #333;
-        background-color: #fff;
-      }
-
-      a {
-        text-decoration: none;
-        color: #2c3e50;
-        transition: color 0.3s ease;
-      }
-
-      a:hover {
-        color: #e74c3c;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 24px;
-      }
-
-      /* 头部样式 */
-      header {
-        width: 100%;
-      }
-
-      .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: rgba(255, 255, 255, 0.95);
-        padding: 15px 0;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        transition: background-color 0.3s ease;
-      }
-
-      .navbar-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .logo {
-        font-family: "Raleway", sans-serif;
-        font-size: 22px;
-        font-weight: 600;
-        color: #333;
-      }
-
-      .nav-links {
-        display: flex;
-        gap: 30px;
-      }
-
-      .nav-links a {
-        font-size: 16px;
-        font-weight: 500;
-        position: relative;
-      }
-
-      .nav-links a::after {
-        content: "";
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background-color: #e74c3c;
-        transition: width 0.3s ease;
-      }
-
-      .nav-links a:hover::after {
-        width: 100%;
-      }
-
-      .search-icon {
-        display: inline-block;
-        margin-left: 20px;
-        cursor: pointer;
-        font-size: 18px;
-      }
-
-      .search-box {
-        display: none;
-        /* position: absolute;
-        right: 0;
-        top: 100%; */
-        width: 200px;
-        /* padding: 10px; */
-        background: white;
-        border-radius: 5px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      }
-
-      .search-box.active {
-        display: inline-block;
-      }
-
-      .search-box input {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-      }
-
-      /* 个人简介横幅 */
-      .profile-banner {
-        margin-top: 80px;
-        padding: 48px 0;
-        text-align: center;
-      }
-
-      .avatar {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        border: 2px solid #ddd;
-        object-fit: cover;
-        margin-bottom: 20px;
-      }
-
-      .profile-name {
-        font-family: "Playfair Display", serif;
-        font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 10px;
-        position: relative;
-        display: inline-block;
-      }
-
-      .profile-name::after {
-        content: "";
-        position: absolute;
-        bottom: -5px;
-        left: 10%;
-        width: 80%;
-        height: 2px;
-        background-color: #2c3e50;
-      }
-
-      .profile-bio {
-        font-size: 16px;
-        color: #666;
-        margin-bottom: 20px;
-      }
-
-      .social-icons {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-      }
-
-      .social-icons a {
-        font-size: 24px;
-        color: #555;
-        transition: color 0.3s ease;
-      }
-
-      .social-icons a:hover {
-        color: #e74c3c;
-      }
-
-      /* 主内容区 */
-      .main-content {
-        display: flex;
-        gap: 30px;
-        margin: 48px 0;
-      }
-
-      .articles-section {
-        flex: 7;
-      }
-
-      .article-card {
-        margin-bottom: 30px;
-        padding: 24px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .article-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      }
-
-      .category-tag {
-        display: inline-block;
-        padding: 4px 10px;
-        background-color: #e74c3c;
-        color: white;
-        border-radius: 15px;
-        font-size: 12px;
-        margin-bottom: 10px;
-      }
-
-      .category-tag.tech {
-        background-color: #3498db;
-      }
-
-      .category-tag.life {
-        background-color: #2ecc71;
-      }
-
-      .article-title {
-        font-family: "Playfair Display", serif;
-        font-size: 20px;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 10px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      .article-excerpt {
-        color: #777;
-        margin-bottom: 15px;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      .article-meta {
-        display: flex;
-        gap: 15px;
-        font-size: 12px;
-        color: #999;
-      }
-
-      /* 分页器 */
-      .pagination {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 40px;
-      }
-
-      .pagination a {
-        display: inline-block;
-        padding: 8px 12px;
-        color: #555;
-        transition: color 0.3s ease;
-      }
-
-      .pagination a.active {
-        color: #e74c3c;
-        font-weight: 600;
-      }
-
-      /* 侧边栏 */
-      .sidebar {
-        flex: 3;
-        background-color: #f8f9fa;
-        padding: 24px;
-        border-radius: 8px;
-      }
-
-      .sidebar-module {
-        margin-bottom: 30px;
-      }
-
-      .sidebar-title {
-        font-size: 14px;
-        font-weight: 700;
-        color: #444;
-        margin-bottom: 15px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #ddd;
-      }
-
-      .tag-cloud {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .tag {
-        padding: 5px 10px;
-        background-color: #fff;
-        border-radius: 15px;
-        font-size: 12px;
-        color: #555;
-        transition: background-color 0.3s ease, color 0.3s ease;
-      }
-
-      .tag:hover {
-        background-color: #2c3e50;
-        color: white;
-      }
-
-      .tag.s {
-        font-size: 11px;
-      }
-
-      .tag.m {
-        font-size: 13px;
-      }
-
-      .tag.l {
-        font-size: 15px;
-      }
-
-      .featured-projects {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .project-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .project-icon {
-        font-size: 20px;
-        color: #2c3e50;
-      }
-
-      .project-info {
-        flex: 1;
-      }
-
-      .project-title {
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 3px;
-      }
-
-      .project-desc {
-        font-size: 12px;
-        color: #777;
-      }
-
-      .subscribe-form {
-        margin-top: 15px;
-      }
-
-      .subscribe-input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        margin-bottom: 10px;
-      }
-
-      .subscribe-button {
-        width: 100%;
-        padding: 10px;
-        background: linear-gradient(to right, #2c3e50, #e74c3c);
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: opacity 0.3s ease;
-      }
-
-      .subscribe-button:hover {
-        opacity: 0.9;
-      }
-
-      /* 页脚 */
-      footer {
-        background-color: #2d3436;
-        color: #aaa;
-        padding: 48px 0 24px;
-      }
-
-      .footer-content {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 30px;
-      }
-
-      .footer-column {
-        flex: 1;
-        padding: 0 15px;
-      }
-
-      .footer-title {
-        color: #fff;
-        font-size: 16px;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #444;
-      }
-
-      .contact-info p {
-        margin-bottom: 10px;
-      }
-
-      .qr-code {
-        cursor: pointer;
-        color: #e74c3c;
-      }
-
-      .qr-modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        z-index: 2000;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .qr-modal.active {
-        display: flex;
-      }
-
-      .qr-modal img {
-        max-width: 200px;
-        border: 5px solid white;
-        border-radius: 5px;
-      }
-
-      .friend-links {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-
-      .friend-links a {
-        color: #aaa;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
-
-      .friend-links a:hover {
-        color: #e74c3c;
-      }
-
-      .copyright {
-        text-align: center;
-        font-size: 12px;
-        padding-top: 20px;
-        border-top: 1px solid #444;
-      }
-
-      /* 响应式设计 */
-      @media (max-width: 900px) {
-        .main-content {
-          flex-direction: column;
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .articles-section,
-        .sidebar {
-          flex: 1;
-          width: 100%;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                Helvetica, Arial, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #fff;
         }
 
-        .sidebar {
-          margin-top: 30px;
+        a {
+            text-decoration: none;
+            color: #2c3e50;
+            transition: color 0.3s ease;
         }
 
-        .footer-content {
-          flex-direction: column;
-          gap: 30px;
+        a:hover {
+            color: #e74c3c;
         }
-      }
 
-      @media (max-width: 500px) {
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* 头部样式 */
+        header {
+            width: 100%;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
         .navbar-container {
-          position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: "Raleway", sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
         }
 
         .nav-links {
-          display: none;
-          position: absolute;
-          top: 100%;
-          left: 0;
-          width: 100%;
-          background-color: white;
-          flex-direction: column;
-          padding: 20px;
-          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 30px;
         }
 
-        .nav-links.active {
-          display: flex;
+        .nav-links a {
+            font-size: 16px;
+            font-weight: 500;
+            position: relative;
         }
 
-        .hamburger {
-          display: block;
-          font-size: 24px;
-          cursor: pointer;
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #e74c3c;
+            transition: width 0.3s ease;
         }
 
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .search-icon {
+            display: inline-block;
+            margin-left: 20px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .search-box {
+            display: none;
+            /* position: absolute;
+        right: 0;
+        top: 100%; */
+            width: 200px;
+            /* padding: 10px; */
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box.active {
+            display: inline-block;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* 个人简介横幅 */
         .profile-banner {
-          margin-top: 60px;
-          padding: 30px 0;
+            margin-top: 80px;
+            padding: 48px 0;
+            text-align: center;
         }
 
         .avatar {
-          width: 100px;
-          height: 100px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            object-fit: cover;
+            margin-bottom: 20px;
         }
 
         .profile-name {
-          font-size: 24px;
+            font-family: "Playfair Display", serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
         }
-      }
+
+        .profile-name::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 10%;
+            width: 80%;
+            height: 2px;
+            background-color: #2c3e50;
+        }
+
+        .profile-bio {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            font-size: 24px;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #e74c3c;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin: 48px 0;
+        }
+
+        .articles-section {
+            flex: 7;
+        }
+
+        .article-card {
+            margin-bottom: 30px;
+            padding: 24px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .article-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .category-tag.tech {
+            background-color: #3498db;
+        }
+
+        .category-tag.life {
+            background-color: #2ecc71;
+        }
+
+        .article-title {
+            font-family: "Playfair Display", serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-excerpt {
+            color: #777;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* 分页器 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 8px 12px;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+
+        .pagination a.active {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            flex: 3;
+            background-color: #f8f9fa;
+            padding: 24px;
+            border-radius: 8px;
+        }
+
+        .sidebar-module {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #444;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            padding: 5px 10px;
+            background-color: #fff;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #555;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .tag:hover {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        .tag.s {
+            font-size: 11px;
+        }
+
+        .tag.m {
+            font-size: 13px;
+        }
+
+        .tag.l {
+            font-size: 15px;
+        }
+
+        .featured-projects {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .project-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .project-icon {
+            font-size: 20px;
+            color: #2c3e50;
+        }
+
+        .project-info {
+            flex: 1;
+        }
+
+        .project-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .project-desc {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .subscribe-form {
+            margin-top: 15px;
+        }
+
+        .subscribe-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .subscribe-button {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(to right, #2c3e50, #e74c3c);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .subscribe-button:hover {
+            opacity: 0.9;
+        }
+
+        /* 页脚 */
+        footer {
+            background-color: #2d3436;
+            color: #aaa;
+            padding: 48px 0 24px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .footer-column {
+            flex: 1;
+            padding: 0 15px;
+        }
+
+        .footer-title {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #444;
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+        }
+
+        .qr-code {
+            cursor: pointer;
+            color: #e74c3c;
+        }
+
+        .qr-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-modal.active {
+            display: flex;
+        }
+
+        .qr-modal img {
+            max-width: 200px;
+            border: 5px solid white;
+            border-radius: 5px;
+        }
+
+        .friend-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .friend-links a {
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .friend-links a:hover {
+            color: #e74c3c;
+        }
+
+        .copyright {
+            text-align: center;
+            font-size: 12px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .articles-section,
+            .sidebar {
+                flex: 1;
+                width: 100%;
+            }
+
+            .sidebar {
+                margin-top: 30px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .navbar-container {
+                position: relative;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+                font-size: 24px;
+                cursor: pointer;
+            }
+
+            .profile-banner {
+                margin-top: 60px;
+                padding: 30px 0;
+            }
+
+            .avatar {
+                width: 100px;
+                height: 100px;
+            }
+
+            .profile-name {
+                font-size: 24px;
+            }
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <!-- 头部导航栏 -->
     <header>
-      <nav class="navbar">
-        <div class="container navbar-container">
-          <a href="#" class="logo">
-            <i class="fas fa-feather-alt logo-icon"></i>
-            我的博客
-          </a>
-          <div class="nav-links">
-            <a href="#">首页</a>
-            <a href="/articles">文章</a>
-            <a href="/archive">归档</a>
-            <a href="/about">关于</a>
-          </div>
-          <div>
-            <div class="search-box">
-              <input type="text" placeholder="搜索..." />
+        <nav class="navbar">
+            <div class="container navbar-container">
+                <a href="#" class="logo">
+                    <i class="fas fa-feather-alt logo-icon"></i>
+                    我的博客
+                </a>
+                <div class="nav-links">
+                    <a href="#">首页</a>
+                    <a href="/articles">文章</a>
+                    <a href="/archive">归档</a>
+                    <a href="/about">关于</a>
+                </div>
+                <div>
+                    <div class="search-box">
+                        <input type="text" placeholder="搜索..." />
+                    </div>
+                    <div class="search-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <div class="hamburger" style="display: none">
+                    <i class="fas fa-bars"></i>
+                </div>
             </div>
-            <div class="search-icon">
-              <i class="fas fa-search"></i>
-            </div>
-          </div>
-          <div class="hamburger" style="display: none">
-            <i class="fas fa-bars"></i>
-          </div>
-        </div>
-      </nav>
+        </nav>
 
-      <!-- 个人简介横幅 -->
-      <div class="container">
-        <div class="profile-banner">
-          <img
-            src=""
-            alt="头像"
-            class="avatar" />
-          <h1 class="profile-name">Rain</h1>
-          <p class="profile-bio">研究生 & 技术写作者</p>
-          <div class="social-icons">
-            <a href="https://github.com/trartcode"
-              ><i class="fab fa-github"></i
-            ></a>
-            <a href="#"><i class="fab fa-weibo"></i></a>
-            <a href="#"><i class="fab fa-zhihu"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-          </div>
+        <!-- 个人简介横幅 -->
+        <div class="container">
+            <div class="profile-banner">
+                <img src="/img/宇航员 (5).jpg" alt="头像" class="avatar" />
+                <h1 class="profile-name">Rain</h1>
+                <p class="profile-bio">研究生 & 技术写作者</p>
+                <div class="social-icons">
+                    <a href="https://github.com/trartcode"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-weibo"></i></a>
+                    <a href="#"><i class="fab fa-zhihu"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
         </div>
-      </div>
     </header>
 
     <!-- 主内容区 -->
     <main class="container">
-      <div class="main-content">
-        <!-- 左侧文章区 -->
-        <section class="articles-section">
-          <article class="article-card">
-            <span class="category-tag tech">#深度学习</span>
-            <span class="category-tag tech">#Transformer</span>
-            <a href="">
-              <h2 class="article-title">论文解读：RoFormer(RoPE)</h2>
-            </a>
-            <p class="article-excerpt">
-              RoFormer:Enhanced transformer with Rotary Position Embedding<br />
-              Neurocomputing 568 (2024) 127063<br />
-              <a href="https://arxiv.org/abs/2104.09864" target="_blank">
-                论文地址：https://arxiv.org/abs/2104.09864
-              </a>
-            </p>
-            <div class="article-meta">
-              <span><i class="far fa-calendar"></i> 2024-04-15</span>
-              <span><i class="far fa-clock"></i> 5分钟阅读</span>
-            </div>
-          </article>
+        <div class="main-content">
+            <!-- 左侧文章区 -->
+            <section class="articles-section">
+                <article class="article-card">
+                    <span class="category-tag tech">#深度学习</span>
+                    <span class="category-tag tech">#Transformer</span>
+                    <a href="">
+                        <h2 class="article-title">论文解读：RoFormer(RoPE)</h2>
+                    </a>
+                    <p class="article-excerpt">
+                        RoFormer:Enhanced transformer with Rotary Position Embedding<br />
+                        Neurocomputing 568 (2024) 127063<br />
+                        <a href="https://arxiv.org/abs/2104.09864" target="_blank">
+                            论文地址：https://arxiv.org/abs/2104.09864
+                        </a>
+                    </p>
+                    <div class="article-meta">
+                        <span><i class="far fa-calendar"></i> 2024-04-15</span>
+                        <span><i class="far fa-clock"></i> 5分钟阅读</span>
+                    </div>
+                </article>
 
-          <article class="article-card">
-            <span class="category-tag tech">#技术</span>
-            <span class="category-tag tech">#GNN</span>
-            <span class="category-tag tech">#GAT</span>
-            <a href="">
-              <h2 class="article-title">论文解读：SPAGAN</h2>
-            </a>
-            <p class="article-excerpt">
-              SPAGAN: Shortest Path Graph Attention Network<br />
-              Proceedings of the Twenty-Eighth International Joint Conference on
-              Artiﬁcial Intelligence (IJCAI-19)<br />
-              <a href="https://arxiv.org/abs/2101.03464" target="_blank">
-                论文地址：https://arxiv.org/abs/2101.03464
-              </a>
-            </p>
-            <div class="article-meta">
-              <span><i class="far fa-calendar"></i> 2024-04-17</span>
-              <span><i class="far fa-clock"></i> 5分钟阅读</span>
-            </div>
-          </article>
+                <article class="article-card">
+                    <span class="category-tag tech">#技术</span>
+                    <span class="category-tag tech">#GNN</span>
+                    <span class="category-tag tech">#GAT</span>
+                    <a href="">
+                        <h2 class="article-title">论文解读：SPAGAN</h2>
+                    </a>
+                    <p class="article-excerpt">
+                        SPAGAN: Shortest Path Graph Attention Network<br />
+                        Proceedings of the Twenty-Eighth International Joint Conference on
+                        Artiﬁcial Intelligence (IJCAI-19)<br />
+                        <a href="https://arxiv.org/abs/2101.03464" target="_blank">
+                            论文地址：https://arxiv.org/abs/2101.03464
+                        </a>
+                    </p>
+                    <div class="article-meta">
+                        <span><i class="far fa-calendar"></i> 2024-04-17</span>
+                        <span><i class="far fa-clock"></i> 5分钟阅读</span>
+                    </div>
+                </article>
 
-          <article class="article-card">
-            <span class="category-tag life">#生活</span>
-            <span class="category-tag life">#极简主义</span>
-            <a href="">
-              <h2 class="article-title">
-                我的极简主义生活方式：如何减少物质依赖
-              </h2>
-            </a>
-            <p class="article-excerpt">
-              极简主义不仅仅是一种设计风格，更是一种生活态度。
-              在这篇文章中，我将分享我如何通过减少物质依赖，专注于真正重要的事物，从而获得更多的自由和幸福感。
-              从整理衣橱开始，到数字极简主义...
-            </p>
-            <div class="article-meta">
-              <span><i class="far fa-calendar"></i> 2024-03-21</span>
-              <span><i class="far fa-clock"></i> 3分钟阅读</span>
-            </div>
-          </article>
+                <article class="article-card">
+                    <span class="category-tag life">#生活</span>
+                    <span class="category-tag life">#极简主义</span>
+                    <a href="">
+                        <h2 class="article-title">
+                            我的极简主义生活方式：如何减少物质依赖
+                        </h2>
+                    </a>
+                    <p class="article-excerpt">
+                        极简主义不仅仅是一种设计风格，更是一种生活态度。
+                        在这篇文章中，我将分享我如何通过减少物质依赖，
+                        专注于真正重要的事物，从而获得更多的自由和幸福感。
+                        从整理衣橱开始，到数字极简主义...
+                    </p>
+                    <div class="article-meta">
+                        <span><i class="far fa-calendar"></i> 2024-03-21</span>
+                        <span><i class="far fa-clock"></i> 3分钟阅读</span>
+                    </div>
+                </article>
 
-          <!-- 分页器 -->
-          <div class="pagination">
-            <a href="#" class="active">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
-            <a href="#"><i class="fas fa-angle-right"></i></a>
-          </div>
-        </section>
+                <!-- 分页器 -->
+                <div class="pagination">
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+                    <a href="#"><i class="fas fa-angle-right"></i></a>
+                </div>
+            </section>
 
-        <!-- 右侧侧边栏 -->
-        <aside class="sidebar">
-          <div class="sidebar-module">
-            <h3 class="sidebar-title">热门标签</h3>
-            <div class="tag-cloud">
-              <a href="#" class="tag l">JavaScript</a>
-              <a href="#" class="tag l">CSS</a>
-              <a href="#" class="tag l">前端开发</a>
-              <a href="#" class="tag l">Python</a>
-              <!-- <a href="#" class="tag l">设计</a> -->
-              <a href="#" class="tag l">阅读</a>
-              <a href="#" class="tag l">生活方式</a>
-              <a href="#" class="tag l">旅行</a>
-              <a href="#" class="tag l">极简主义</a>
-            </div>
-          </div>
+            <!-- 右侧侧边栏 -->
+            <aside class="sidebar">
+                <div class="sidebar-module">
+                    <h3 class="sidebar-title">热门标签</h3>
+                    <div class="tag-cloud">
+                        <a href="#" class="tag l">JavaScript</a>
+                        <a href="#" class="tag l">CSS</a>
+                        <a href="#" class="tag l">前端开发</a>
+                        <a href="#" class="tag l">Python</a>
+                        <!-- <a href="#" class="tag l">设计</a> -->
+                        <a href="#" class="tag l">阅读</a>
+                        <a href="#" class="tag l">生活方式</a>
+                        <a href="#" class="tag l">旅行</a>
+                        <a href="#" class="tag l">极简主义</a>
+                    </div>
+                </div>
 
-          <div class="sidebar-module">
-            <h3 class="sidebar-title">精选项目</h3>
-            <div class="featured-projects">
-              <div class="project-item">
-                <div class="project-icon">
-                  <i class="fab fa-github"></i>
+                <div class="sidebar-module">
+                    <h3 class="sidebar-title">精选项目</h3>
+                    <div class="featured-projects">
+                        <div class="project-item">
+                            <div class="project-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div class="project-info">
+                                <a href="https://trartcode.github.io" target="_blank">
+                                    <h4 class="project-title">个人博客系统</h4>
+                                    <p class="project-desc">基于Github的轻量级博客系统</p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-item">
+                            <div class="project-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="project-info">
+                                <a href="">
+                                    <h4 class="project-title">XXX插件</h4>
+                                    <p class="project-desc">用于数据分析</p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-item">
+                            <div class="project-icon">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <div class="project-info">
+                                <a href="">
+                                    <h4 class="project-title">设计作品集</h4>
+                                    <p class="project-desc">UI/UX设计案例展示</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="project-info">
-                  <a href="https://github.com/trartcode/myblog" target="_blank">
-                    <h4 class="project-title">个人博客系统</h4>
-                    <p class="project-desc">基于Django的轻量级博客系统</p>
-                  </a>
-                </div>
-              </div>
-              <div class="project-item">
-                <div class="project-icon">
-                  <i class="fas fa-code"></i>
-                </div>
-                <div class="project-info">
-                  <a href="">
-                    <h4 class="project-title">XXX插件</h4>
-                    <p class="project-desc">用于数据分析</p>
-                  </a>
-                </div>
-              </div>
-              <div class="project-item">
-                <div class="project-icon">
-                  <i class="fas fa-palette"></i>
-                </div>
-                <div class="project-info">
-                  <a href="">
-                    <h4 class="project-title">设计作品集</h4>
-                    <p class="project-desc">UI/UX设计案例展示</p>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="sidebar-module">
-            <h3 class="sidebar-title">订阅更新</h3>
-            <p style="font-size: 14px; color: #666; margin-bottom: 15px">
-              订阅我的博客，获取最新文章通知
-            </p>
-            <form class="subscribe-form">
-              <input
-                type="email"
-                placeholder="您的邮箱地址"
-                class="subscribe-input" />
-              <button type="submit" class="subscribe-button">订阅</button>
-            </form>
-          </div>
-        </aside>
-      </div>
+                <div class="sidebar-module">
+                    <h3 class="sidebar-title">订阅更新</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 15px">
+                        订阅我的博客，获取最新文章通知
+                    </p>
+                    <form class="subscribe-form">
+                        <input type="email" placeholder="您的邮箱地址" class="subscribe-input" />
+                        <button type="submit" class="subscribe-button">订阅</button>
+                    </form>
+                </div>
+            </aside>
+        </div>
     </main>
 
     <!-- 页脚 -->
     <footer>
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-column contact-info">
-            <h3 class="footer-title">联系方式</h3>
-            <p><i class="far fa-envelope"></i> 3036474166@qq.com</p>
-            <p class="qr-code">
-              <i class="fab fa-weixin"></i> 微信：点击查看二维码
-            </p>
-          </div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column contact-info">
+                    <h3 class="footer-title">联系方式</h3>
+                    <p><i class="far fa-envelope"></i> 3036474166@qq.com</p>
+                    <p class="qr-code">
+                        <i class="fab fa-weixin"></i> 微信：点击查看二维码
+                    </p>
+                </div>
 
-          <div class="footer-column">
-            <h3 class="footer-title">友情链接</h3>
-            <div class="friend-links">
-              <a href="https://kimi.moonshot.cn/" target="_blank">
-                <i class="fas fa-link"></i> kimi
-              </a>
-              <a href="https://huggingface.co/" target="_blank">
-                <i class="fas fa-link"></i> huggingface
-              </a>
-              <a href="https://leetcode.cn/" target="_blank">
-                <i class="fas fa-link"></i> leetcode刷题
-              </a>
-              <a href="https://github.com" target="_blank">
-                <i class="fas fa-link"></i> github
-              </a>
+                <div class="footer-column">
+                    <h3 class="footer-title">友情链接</h3>
+                    <div class="friend-links">
+                        <a href="https://kimi.moonshot.cn/" target="_blank">
+                            <i class="fas fa-link"></i> kimi
+                        </a>
+                        <a href="https://huggingface.co/" target="_blank">
+                            <i class="fas fa-link"></i> huggingface
+                        </a>
+                        <a href="https://leetcode.cn/" target="_blank">
+                            <i class="fas fa-link"></i> leetcode刷题
+                        </a>
+                        <a href="https://github.com" target="_blank">
+                            <i class="fas fa-link"></i> github
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3 class="footer-title">关于本站</h3>
+                    <p style="line-height: 1.6">
+                        本博客专注于分享深度学习论文、算法和生活随笔。
+                        所有文章均为原创，转载请注明出处。
+                    </p>
+                </div>
             </div>
-          </div>
 
-          <div class="footer-column">
-            <h3 class="footer-title">关于本站</h3>
-            <p style="line-height: 1.6">
-              本博客使用Django开发，专注于分享深度学习论文、算法和生活随笔。所有文章均为原创，转载请注明出处。
-            </p>
-          </div>
+            <div class="copyright">
+                <p>© 2024 我的博客 | 保留所有权利</p>
+            </div>
         </div>
-
-        <div class="copyright">
-          <p>© 2024 我的博客 | 保留所有权利</p>
-        </div>
-      </div>
     </footer>
 
     <!-- 微信二维码弹窗 -->
     <div class="qr-modal">
-      <img src="" alt="微信二维码" />
+        <img src="/img/宇航员 (5).jpg" alt="微信二维码" />
     </div>
 
     <script>
-      // 搜索框交互
-      document
-        .querySelector(".search-icon")
-        .addEventListener("click", function () {
-          document.querySelector(".search-box").classList.toggle("active");
-        });
-
-      // 微信二维码弹窗
-      document.querySelector(".qr-code").addEventListener("click", function () {
-        document.querySelector(".qr-modal").classList.add("active");
-      });
-
-      document
-        .querySelector(".qr-modal")
-        .addEventListener("click", function () {
-          this.classList.remove("active");
-        });
-
-      // 响应式导航
-      if (document.querySelector(".hamburger")) {
+        // 搜索框交互
         document
-          .querySelector(".hamburger")
-          .addEventListener("click", function () {
-            document.querySelector(".nav-links").classList.toggle("active");
-          });
-      }
+            .querySelector(".search-icon")
+            .addEventListener("click", function () {
+                document.querySelector(".search-box").classList.toggle("active");
+            });
 
-      // 滚动时导航栏透明度变化
-      window.addEventListener("scroll", function () {
-        const navbar = document.querySelector(".navbar");
-        if (window.scrollY > 100) {
-          navbar.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
-        } else {
-          navbar.style.backgroundColor = "rgba(255, 255, 255, 0.95)";
+        // 微信二维码弹窗
+        document.querySelector(".qr-code").addEventListener("click", function () {
+            document.querySelector(".qr-modal").classList.add("active");
+        });
+
+        document
+            .querySelector(".qr-modal")
+            .addEventListener("click", function () {
+                this.classList.remove("active");
+            });
+
+        // 响应式导航
+        if (document.querySelector(".hamburger")) {
+            document
+                .querySelector(".hamburger")
+                .addEventListener("click", function () {
+                    document.querySelector(".nav-links").classList.toggle("active");
+                });
         }
-      });
+
+        // 滚动时导航栏透明度变化
+        window.addEventListener("scroll", function () {
+            const navbar = document.querySelector(".navbar");
+            if (window.scrollY > 100) {
+                navbar.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
+            } else {
+                navbar.style.backgroundColor = "rgba(255, 255, 255, 0.95)";
+            }
+        });
     </script>
-  </body>
+</body>
+
 </html>
