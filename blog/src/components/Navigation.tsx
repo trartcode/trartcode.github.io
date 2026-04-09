@@ -61,7 +61,7 @@ const Navigation = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-ink-gray hover:text-ink-dark transition-colors"
+            className="md:hidden p-2 rounded-lg text-ink-gray hover:text-ink-dark transition-colors cursor-pointer"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -80,7 +80,7 @@ const Navigation = () => {
                   to={path}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`flex items-center gap-3 py-2 text-lg transition-colors ${
-                    isActive ? 'text-ink-dark font-medium' : 'text-ink-light'
+                    isActive ? 'text-ink-dark font-medium' : 'text-ink-light hover:text-ink-dark'
                   }`}
                 >
                   <Icon size={18} strokeWidth={1.5} style={{ verticalAlign: 'middle' }} />
