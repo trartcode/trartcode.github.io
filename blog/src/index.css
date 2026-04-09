@@ -44,7 +44,6 @@
   /* 水墨笔触下划线 */
   .ink-underline {
     position: relative;
-    display: inline-block;
   }
   
   .ink-underline::after {

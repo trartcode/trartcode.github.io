@@ -47,7 +47,7 @@ const Navigation = () => {
                 <Link
                   key={path}
                   to={path}
-                  className={`ink-underline flex items-center gap-2 text-lg transition-colors ${
+                  className={`ink-underline flex flex-row items-center gap-2 text-lg transition-colors ${
                     isActive ? 'text-ink-dark font-medium' : 'text-ink-light hover:text-ink-gray'
                   }`}
                 >
@@ -83,8 +83,8 @@ const Navigation = () => {
                     isActive ? 'text-ink-dark font-medium' : 'text-ink-light'
                   }`}
                 >
-                  <Icon size={18} strokeWidth={1.5} />
-                  <span>{label}</span>
+                  <Icon size={18} strokeWidth={1.5} style={{ verticalAlign: 'middle' }} />
+                  <span style={{ verticalAlign: 'middle' }}>{label}</span>
                 </Link>
               );
             })}
