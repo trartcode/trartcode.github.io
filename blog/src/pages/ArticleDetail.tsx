@@ -1,19 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Tag, Share2, Heart, Bookmark } from 'lucide-react';
-import { getArticleBySlug, getAllArticles } from '../utils/articles';
+import { getArticleBySlug, getAllArticles, getArticleStats, toggleLike, toggleBookmark } from '../utils/articles';
 
 const ArticleDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [isLiked, setIsLiked] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [stats, setStats] = useState({ likes: 0, bookmarks: 0, userLiked: false, userBookmarked: false });
 
   // 动态加载文章
   const article = id ? getArticleBySlug(id) : undefined;
   const allArticles = getAllArticles();
+
+  // 初始化统计数据
+  useEffect(() => {
+    if (id) {
+      const articleStats = getArticleStats(id);
+      setStats(articleStats);
+    }
+  }, [id]);
+
+  const handleLike = () => {
+    if (id) {
+      const newStats = toggleLike(id);
+      setStats(newStats);
+    }
+  };
+
+  const handleBookmark = () => {
+    if (id) {
+      const newStats = toggleBookmark(id);
+      setStats(newStats);
+    }
+  };
 
   // 找不到文章
   if (!article) {
@@ -89,26 +109,28 @@ const ArticleDetail = () => {
           {/* Actions */}
           <div className="flex items-center gap-4 pt-6">
             <button
-              onClick={() => setIsLiked(!isLiked)}
+              onClick={handleLike}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all cursor-pointer ${
-                isLiked
+                stats.userLiked
                   ? 'border-accent-red text-accent-red bg-accent-red/5'
                   : 'border-paper-300 text-ink-light hover:border-ink-gray'
               }`}
             >
-              <Heart size={16} fill={isLiked ? 'currentColor' : 'none'} />
-              <span className="text-sm">{isLiked ? '已喜欢' : '喜欢'}</span>
+              <Heart size={16} fill={stats.userLiked ? 'currentColor' : 'none'} />
+              <span className="text-sm">{stats.userLiked ? '已喜欢' : '喜欢'}</span>
+              {stats.likes > 0 && <span className="text-xs">({stats.likes})</span>}
             </button>
             <button
-              onClick={() => setIsBookmarked(!isBookmarked)}
+              onClick={handleBookmark}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all cursor-pointer ${
-                isBookmarked
+                stats.userBookmarked
                   ? 'border-accent-cyan text-accent-cyan bg-accent-cyan/5'
                   : 'border-paper-300 text-ink-light hover:border-ink-gray'
               }`}
             >
-              <Bookmark size={16} fill={isBookmarked ? 'currentColor' : 'none'} />
-              <span className="text-sm">{isBookmarked ? '已收藏' : '收藏'}</span>
+              <Bookmark size={16} fill={stats.userBookmarked ? 'currentColor' : 'none'} />
+              <span className="text-sm">{stats.userBookmarked ? '已收藏' : '收藏'}</span>
+              {stats.bookmarks > 0 && <span className="text-xs">({stats.bookmarks})</span>}
             </button>
             <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-paper-300 text-ink-light hover:border-ink-gray transition-all ml-auto cursor-pointer">
               <Share2 size={16} />

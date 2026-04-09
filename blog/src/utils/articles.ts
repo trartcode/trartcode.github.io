@@ -86,3 +86,70 @@ export const getYears = (): string[] => {
   const uniqueYears = [...new Set(years)];
   return uniqueYears.sort((a, b) => b.localeCompare(a));
 };
+
+// ========== 喜欢和收藏统计 ==========
+
+interface ArticleStats {
+  likes: number;
+  bookmarks: number;
+  userLiked: boolean;
+  userBookmarked: boolean;
+}
+
+type StatsRecord = Record<string, ArticleStats>;
+
+const STATS_KEY = 'blog_article_stats';
+
+const getStats = (): StatsRecord => {
+  try {
+    const stored = localStorage.getItem(STATS_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+};
+
+const saveStats = (stats: StatsRecord): void => {
+  localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+};
+
+export const getArticleStats = (slug: string): ArticleStats => {
+  const stats = getStats();
+  return stats[slug] || { likes: 0, bookmarks: 0, userLiked: false, userBookmarked: false };
+};
+
+export const toggleLike = (slug: string): ArticleStats => {
+  const stats = getStats();
+  if (!stats[slug]) {
+    stats[slug] = { likes: 0, bookmarks: 0, userLiked: false, userBookmarked: false };
+  }
+  
+  if (stats[slug].userLiked) {
+    stats[slug].likes = Math.max(0, stats[slug].likes - 1);
+    stats[slug].userLiked = false;
+  } else {
+    stats[slug].likes += 1;
+    stats[slug].userLiked = true;
+  }
+  
+  saveStats(stats);
+  return stats[slug];
+};
+
+export const toggleBookmark = (slug: string): ArticleStats => {
+  const stats = getStats();
+  if (!stats[slug]) {
+    stats[slug] = { likes: 0, bookmarks: 0, userLiked: false, userBookmarked: false };
+  }
+  
+  if (stats[slug].userBookmarked) {
+    stats[slug].bookmarks = Math.max(0, stats[slug].bookmarks - 1);
+    stats[slug].userBookmarked = false;
+  } else {
+    stats[slug].bookmarks += 1;
+    stats[slug].userBookmarked = true;
+  }
+  
+  saveStats(stats);
+  return stats[slug];
+};
