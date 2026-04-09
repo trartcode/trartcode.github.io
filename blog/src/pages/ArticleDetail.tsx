@@ -2,12 +2,32 @@ import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Tag, Share2, Heart, Bookmark } from 'lucide-react';
+import { ArrowLeft, Calendar, Tag, Share2, Heart, Bookmark, Check } from 'lucide-react';
 import { getArticleBySlug, getAllArticles, getArticleStats, toggleLike, toggleBookmark } from '../utils/articles';
 
 const ArticleDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [stats, setStats] = useState({ likes: 0, bookmarks: 0, userLiked: false, userBookmarked: false });
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback for older browsers
+      const input = document.createElement('input');
+      input.value = url;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   // 动态加载文章
   const article = id ? getArticleBySlug(id) : undefined;
@@ -132,9 +152,16 @@ const ArticleDetail = () => {
               <span className="text-sm">{stats.userBookmarked ? '已收藏' : '收藏'}</span>
               {stats.bookmarks > 0 && <span className="text-xs">({stats.bookmarks})</span>}
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-paper-300 text-ink-light hover:border-ink-gray transition-all ml-auto cursor-pointer">
-              <Share2 size={16} />
-              <span className="text-sm">分享</span>
+            <button
+              onClick={handleShare}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ml-auto cursor-pointer ${
+                copied
+                  ? 'border-accent-cyan text-accent-cyan bg-accent-cyan/5'
+                  : 'border-paper-300 text-ink-light hover:border-ink-gray'
+              }`}
+            >
+              {copied ? <Check size={16} /> : <Share2 size={16} />}
+              <span className="text-sm">{copied ? '已复制' : '分享'}</span>
             </button>
           </div>
         </article>
