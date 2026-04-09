@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import ArticleCard from '../components/ArticleCard';
 import { getAllArticles, getCategories, getYears } from '../utils/articles';
 
@@ -112,7 +112,7 @@ const Blog = () => {
           </div>
 
           {/* Search */}
-          <div className="relative w-full md:w-80">
+          <div className="relative w-full md:w-80" style={{ position: 'relative' }}>
             <Search
               size={18}
               style={{
@@ -122,7 +122,7 @@ const Blog = () => {
                 transform: 'translateY(-50%)',
                 color: '#6b6b6b',
                 pointerEvents: 'none',
-                zIndex: 1,
+                zIndex: 2,
               }}
             />
             <input
@@ -133,7 +133,7 @@ const Blog = () => {
               style={{
                 width: '100%',
                 paddingLeft: '42px',
-                paddingRight: '16px',
+                paddingRight: searchTerm ? '38px' : '16px',
                 paddingTop: '10px',
                 paddingBottom: '10px',
                 borderRadius: '8px',
@@ -142,8 +142,23 @@ const Blog = () => {
                 color: '#2d2d2d',
                 outline: 'none',
                 fontSize: '14px',
+                position: 'relative',
               }}
             />
+            {searchTerm && (
+              <button
+                onClick={() => { setSearchTerm(''); handleFilterChange(); }}
+                className="absolute p-1 rounded-full text-ink-light hover:text-ink-dark hover:bg-ink-gray/20 transition-colors cursor-pointer"
+                style={{
+                  right: '12px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  zIndex: 3,
+                }}
+              >
+                <X size={16} />
+              </button>
+            )}
           </div>
         </div>
 
