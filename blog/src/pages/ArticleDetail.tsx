@@ -1,66 +1,43 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Tag, Share2, Heart, Bookmark } from 'lucide-react';
+import { getArticleBySlug, getAllArticles } from '../utils/articles';
 
 const ArticleDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
-  // Sample article content
-  const article = {
-    id,
-    title: '静水流深：技术之路的思考',
-    date: '2026年4月8日',
-    category: '技术',
-    author: '墨韵斋主人',
-    readingTime: '8 分钟',
-    content: `
-当代码在指尖流淌，当逻辑在脑海中展开，我们追求的究竟是什么？
+  // 动态加载文章
+  const article = id ? getArticleBySlug(id) : undefined;
+  const allArticles = getAllArticles();
 
-是技术的精进，还是内心的平静？在这条漫长的技术之路上，我一直在思考这个问题。
+  // 找不到文章
+  if (!article) {
+    return (
+      <div className="min-h-screen pt-32 pb-20">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h1 className="font-calligraphy text-3xl text-ink-dark mb-6">文章未找到</h1>
+          <p className="text-ink-light mb-8">抱歉，您访问的文章不存在或已被删除。</p>
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-ink-dark text-paper-50 hover:bg-ink-gray transition-colors"
+          >
+            <ArrowLeft size={18} />
+            <span>返回文章列表</span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
-## 缘起
-
-记得刚踏入编程世界的那一天，眼中满是好奇与期待。那时的我，以为学会各种框架、掌握各种工具，就是成为一个好程序员的全部。
-
-多年后回首，才发现那些看似炫酷的技术不过是工具，真正的核心，是解决问题的思维方式，是对代码的敬畏之心。
-
-## 沉淀
-
-> 「水善利万物而不争，处众人之所恶，故几于道。」——《道德经》
-
-如水般的代码，应该有以下特质：
-
-1. **简洁** - 去除一切不必要的复杂性
-2. **清晰** - 让阅读者一目了然
-3. **柔韧** - 能够适应变化，而不是脆弱易碎
-4. **谦逊** - 知道自己能力的边界
-
-## 感悟
-
-技术之路漫漫，吾将上下而求索。
-
-在这个快节奏的时代，我们常常急于追逐新技术、新框架，却忘了停下来思考：**我们为什么写代码？**
-
-是为了完成工作？是为了解决用户的问题？还是为了实现自己的价值？
-
-或许，答案就在这水墨之间——
-
-\`\`\`
-代码是诗，技术是道。
-静水流深，方能致远。
-\`\`\`
-
-愿我们都能在这条路上，走出自己的节奏，写出属于自己的篇章。
-
----
-
-*「落霞与孤鹜齐飞，秋水共长天一色。」*
-`,
-  };
+  // 获取上一篇/下一篇文章
+  const currentIndex = allArticles.findIndex((a) => a.slug === id);
+  const prevArticle = currentIndex < allArticles.length - 1 ? allArticles[currentIndex + 1] : null;
+  const nextArticle = currentIndex > 0 ? allArticles[currentIndex - 1] : null;
 
   return (
     <div className="min-h-screen pt-32 pb-20">
@@ -99,7 +76,9 @@ const ArticleDetail = () => {
           {/* Author */}
           <div className="flex items-center gap-3 pb-6 border-b border-paper-200">
             <div className="w-10 h-10 rounded-full bg-accent-ochre/20 flex items-center justify-center">
-              <span className="font-calligraphy text-accent-seal">墨</span>
+              <span className="font-calligraphy text-accent-seal">
+                {article.author.charAt(0)}
+              </span>
             </div>
             <div>
               <p className="text-ink-dark font-medium">{article.author}</p>
@@ -147,20 +126,28 @@ const ArticleDetail = () => {
 
         {/* Navigation */}
         <div className="flex justify-between items-center mt-8 py-6 border-t border-paper-200">
-          <Link
-            to="/blog"
-            className="text-ink-light hover:text-ink-dark transition-colors flex items-center gap-2"
-          >
-            <ArrowLeft size={16} />
-            <span>返回列表</span>
-          </Link>
-          <Link
-            to="/blog"
-            className="text-ink-light hover:text-ink-dark transition-colors flex items-center gap-2"
-          >
-            <span>更多文章</span>
-            <span>→</span>
-          </Link>
+          {prevArticle ? (
+            <Link
+              to={`/blog/${prevArticle.slug}`}
+              className="text-ink-light hover:text-ink-dark transition-colors flex items-center gap-2"
+            >
+              <ArrowLeft size={16} />
+              <span className="max-w-40 truncate">{prevArticle.title}</span>
+            </Link>
+          ) : (
+            <div />
+          )}
+          {nextArticle ? (
+            <Link
+              to={`/blog/${nextArticle.slug}`}
+              className="text-ink-light hover:text-ink-dark transition-colors flex items-center gap-2"
+            >
+              <span className="max-w-40 truncate">{nextArticle.title}</span>
+              <span>→</span>
+            </Link>
+          ) : (
+            <div />
+          )}
         </div>
       </div>
     </div>
