@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Feather, BookOpen, Sparkles } from 'lucide-react';
+import { getAllArticles } from '../utils/articles';
 
 const Home = () => {
   const [mounted, setMounted] = useState(false);
+  const articles = useMemo(() => getAllArticles(), []);
+  const recentArticles = articles.slice(0, 3);
 
   useEffect(() => {
     setMounted(true);
@@ -82,35 +85,43 @@ const Home = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="group"
-            >
-              <Link to={`/blog/post-${i}`}>
-                <article className="xuan-paper rounded-xl overflow-hidden border border-paper-300 card-hover cursor-pointer h-full hover:scale-[1.02]">
-                  <div className="p-6">
-                    <div className="text-xs text-ink-light mb-3">
-                      {new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+          {recentArticles.length > 0 ? (
+            recentArticles.map((article) => (
+              <div key={article.slug} className="group">
+                <Link to={`/blog/${article.slug}`}>
+                  <article className="xuan-paper rounded-xl overflow-hidden border border-paper-300 card-hover cursor-pointer h-full hover:scale-[1.02]">
+                    {article.coverImage && (
+                      <div className="h-40 overflow-hidden">
+                        <img
+                          src={article.coverImage}
+                          alt={article.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <div className="text-xs text-ink-light mb-3">
+                        {article.date} · {article.category}
+                      </div>
+                      <h3 className="font-calligraphy text-xl text-ink-dark mb-3 group-hover:text-ink-gray transition-colors line-clamp-2">
+                        {article.title}
+                      </h3>
+                      <p className="text-ink-light text-sm line-clamp-3">
+                        {article.excerpt}
+                      </p>
+                      <div className="mt-4 text-accent-ochre text-sm group-hover:text-accent-seal transition-colors">
+                        阅读全文 →
+                      </div>
                     </div>
-                    <h3 className="font-calligraphy text-xl text-ink-dark mb-3 group-hover:text-ink-gray transition-colors">
-                      {['静水流深：技术之路的思考', '人间烟火：周末的厨房时光', '山水之间：一次说走就走的旅行'][i - 1]}
-                    </h3>
-                    <p className="text-ink-light text-sm line-clamp-3">
-                      {[
-                        '当代码在指尖流淌，当逻辑在脑海中展开，我们追求的究竟是什么？是技术的精进，还是内心的平静？',
-                        '周末的厨房里，锅碗瓢盆碰撞出生活的旋律。简单的食材，朴素的烹饪，却蕴含着最深的人间烟火。',
-                        '远离城市的喧嚣，置身于山水之间。雾气缭绕的山峦，清澈见底的溪流，让人心旷神怡，忘却尘世的烦恼。',
-                      ][i - 1]}
-                    </p>
-                    <div className="mt-4 text-accent-ochre text-sm group-hover:text-accent-seal transition-colors">
-                      阅读全文 →
-                    </div>
-                  </div>
-                </article>
-              </Link>
+                  </article>
+                </Link>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-3 text-center py-12 text-ink-light">
+              <p>暂无文章</p>
             </div>
-          ))}
+          )}
         </div>
 
         <div className="text-center mt-10">
