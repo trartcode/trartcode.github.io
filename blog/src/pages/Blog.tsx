@@ -1,7 +1,9 @@
 import { useState, useMemo } from 'react';
-import { Search } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import ArticleCard from '../components/ArticleCard';
 import { getAllArticles, getCategories, getYears } from '../utils/articles';
+
+const PAGE_SIZE = 6;
 
 const Blog = () => {
   const articles = useMemo(() => getAllArticles(), []);
@@ -10,6 +12,7 @@ const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('全部');
   const [selectedYear, setSelectedYear] = useState('全部');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredArticles = articles.filter((article) => {
     const matchesSearch =
@@ -26,6 +29,20 @@ const Blog = () => {
 
     return matchesSearch && matchesCategory && matchesYear;
   });
+
+  const totalPages = Math.ceil(filteredArticles.length / PAGE_SIZE);
+  const paginatedArticles = filteredArticles.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  };
+
+  const handleFilterChange = () => {
+    setCurrentPage(1);
+  };
 
   return (
     <div className="min-h-screen pt-32 pb-20">
@@ -48,7 +65,7 @@ const Blog = () => {
               {categories.map((category) => (
                 <button
                   key={category}
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => { setSelectedCategory(category); handleFilterChange(); }}
                   className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap transition-all cursor-pointer flex-shrink-0 ${
                     selectedCategory === category
                       ? 'bg-ink-dark text-paper-50'
@@ -69,7 +86,7 @@ const Blog = () => {
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               <button
-                onClick={() => setSelectedYear('全部')}
+                onClick={() => { setSelectedYear('全部'); handleFilterChange(); }}
                 className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap transition-all cursor-pointer flex-shrink-0 ${
                   selectedYear === '全部'
                     ? 'bg-ink-dark text-paper-50'
@@ -81,7 +98,7 @@ const Blog = () => {
               {years.map((year) => (
                 <button
                   key={year}
-                  onClick={() => setSelectedYear(year)}
+                  onClick={() => { setSelectedYear(year); handleFilterChange(); }}
                   className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap transition-all cursor-pointer flex-shrink-0 ${
                     selectedYear === year
                       ? 'bg-ink-dark text-paper-50'
@@ -112,7 +129,7 @@ const Blog = () => {
               type="text"
               placeholder="搜索文章..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => { setSearchTerm(e.target.value); handleFilterChange(); }}
               style={{
                 width: '100%',
                 paddingLeft: '42px',
@@ -132,7 +149,7 @@ const Blog = () => {
 
         {/* Articles Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredArticles.map((article, index) => (
+          {paginatedArticles.map((article, index) => (
             <ArticleCard key={article.slug} {...article} index={index} />
           ))}
         </div>
@@ -144,24 +161,40 @@ const Blog = () => {
           </div>
         )}
 
-        {/* Pagination Placeholder */}
-        {filteredArticles.length > 0 && (
+        {/* Pagination */}
+        {totalPages > 1 && (
           <div className="flex justify-center mt-12">
             <div className="flex items-center gap-2">
               <button
-                className="px-4 py-2 rounded-lg border border-paper-300 text-ink-light hover:bg-paper-100 transition-colors disabled:opacity-50 cursor-pointer"
-                disabled
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-lg border border-paper-300 text-ink-light hover:bg-paper-100 transition-colors disabled:opacity-50 cursor-pointer flex items-center gap-1"
               >
+                <ChevronLeft size={16} />
                 上一页
               </button>
-              <span className="px-4 py-2 text-ink-light">
-                1 / 1
-              </span>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`w-10 h-10 rounded-lg text-sm transition-colors cursor-pointer ${
+                      currentPage === page
+                        ? 'bg-ink-dark text-paper-50'
+                        : 'border border-paper-300 text-ink-light hover:bg-paper-100'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
               <button
-                className="px-4 py-2 rounded-lg border border-paper-300 text-ink-light hover:bg-paper-100 transition-colors disabled:opacity-50 cursor-pointer"
-                disabled
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 rounded-lg border border-paper-300 text-ink-light hover:bg-paper-100 transition-colors disabled:opacity-50 cursor-pointer flex items-center gap-1"
               >
                 下一页
+                <ChevronRight size={16} />
               </button>
             </div>
           </div>
