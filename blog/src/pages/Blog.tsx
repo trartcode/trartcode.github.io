@@ -1,21 +1,30 @@
 import { useState, useMemo } from 'react';
 import { Search } from 'lucide-react';
 import ArticleCard from '../components/ArticleCard';
-import { getAllArticles, getCategories } from '../utils/articles';
+import { getAllArticles, getCategories, getYears } from '../utils/articles';
 
 const Blog = () => {
   const articles = useMemo(() => getAllArticles(), []);
   const categories = useMemo(() => getCategories(), []);
+  const years = useMemo(() => getYears(), []);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('全部');
+  const [selectedYear, setSelectedYear] = useState('全部');
 
   const filteredArticles = articles.filter((article) => {
     const matchesSearch =
       article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       article.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === '全部' || article.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+
+    const articleYear = (() => {
+      const date = new Date((article as any).dateRaw || article.date);
+      return date.getFullYear().toString();
+    })();
+
+    const matchesCategory = selectedCategory === '全部' || article.category === selectedCategory;
+    const matchesYear = selectedYear === '全部' || articleYear === selectedYear;
+
+    return matchesSearch && matchesCategory && matchesYear;
   });
 
   return (
@@ -28,18 +37,19 @@ const Blog = () => {
         </div>
 
         {/* Search & Filter */}
-        <div className="mb-10">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-            {/* Categories */}
+        <div className="mb-10 space-y-4">
+          {/* Categories Row */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="text-sm text-ink-light flex-shrink-0">分类：</span>
             <div
-              className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 flex-1"
+              className="flex items-center gap-2 overflow-x-auto"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap transition-all duration-300 cursor-pointer flex-shrink-0 ${
+                  className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap transition-all cursor-pointer flex-shrink-0 ${
                     selectedCategory === category
                       ? 'bg-ink-dark text-paper-50'
                       : 'text-ink-light hover:text-ink-dark hover:bg-paper-200'
@@ -49,41 +59,74 @@ const Blog = () => {
                 </button>
               ))}
             </div>
+          </div>
 
-            {/* Search */}
-            <div className="relative w-full md:w-80 flex-shrink-0">
-              <Search
-                size={18}
-                style={{
-                  position: 'absolute',
-                  left: '14px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: '#6b6b6b',
-                  pointerEvents: 'none',
-                  zIndex: 1,
-                }}
-              />
-              <input
-                type="text"
-                placeholder="搜索文章..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  width: '100%',
-                  paddingLeft: '42px',
-                  paddingRight: '16px',
-                  paddingTop: '10px',
-                  paddingBottom: '10px',
-                  borderRadius: '8px',
-                  border: '1px solid #e0d8ca',
-                  backgroundColor: 'rgba(250, 248, 245, 0.5)',
-                  color: '#2d2d2d',
-                  outline: 'none',
-                  fontSize: '14px',
-                }}
-              />
+          {/* Years Row */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="text-sm text-ink-light flex-shrink-0">时间：</span>
+            <div
+              className="flex items-center gap-2 overflow-x-auto"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              <button
+                onClick={() => setSelectedYear('全部')}
+                className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap transition-all cursor-pointer flex-shrink-0 ${
+                  selectedYear === '全部'
+                    ? 'bg-ink-dark text-paper-50'
+                    : 'text-ink-light hover:text-ink-dark hover:bg-paper-200'
+                }`}
+              >
+                全部
+              </button>
+              {years.map((year) => (
+                <button
+                  key={year}
+                  onClick={() => setSelectedYear(year)}
+                  className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap transition-all cursor-pointer flex-shrink-0 ${
+                    selectedYear === year
+                      ? 'bg-ink-dark text-paper-50'
+                      : 'text-ink-light hover:text-ink-dark hover:bg-paper-200'
+                  }`}
+                >
+                  {year} 年
+                </button>
+              ))}
             </div>
+          </div>
+
+          {/* Search */}
+          <div className="relative w-full md:w-80">
+            <Search
+              size={18}
+              style={{
+                position: 'absolute',
+                left: '14px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: '#6b6b6b',
+                pointerEvents: 'none',
+                zIndex: 1,
+              }}
+            />
+            <input
+              type="text"
+              placeholder="搜索文章..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '100%',
+                paddingLeft: '42px',
+                paddingRight: '16px',
+                paddingTop: '10px',
+                paddingBottom: '10px',
+                borderRadius: '8px',
+                border: '1px solid #e0d8ca',
+                backgroundColor: 'rgba(250, 248, 245, 0.5)',
+                color: '#2d2d2d',
+                outline: 'none',
+                fontSize: '14px',
+              }}
+            />
           </div>
         </div>
 

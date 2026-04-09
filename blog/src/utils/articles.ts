@@ -76,3 +76,13 @@ export const getCategories = (): string[] => {
   const categories = [...new Set(articles.map((a) => a.category))];
   return ['全部', ...categories];
 };
+
+export const getYears = (): string[] => {
+  const articles = getAllArticles();
+  const years = articles.map((a) => {
+    const date = new Date((a as any).dateRaw || a.date);
+    return date.getFullYear().toString();
+  });
+  const uniqueYears = [...new Set(years)];
+  return uniqueYears.sort((a, b) => b.localeCompare(a));
+};
