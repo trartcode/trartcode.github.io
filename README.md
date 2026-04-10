@@ -1,73 +1,106 @@
-# React + TypeScript + Vite
+# 个人博客
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个简洁优雅的个人博客系统，基于 React + TypeScript + Tailwind CSS 构建。
 
-Currently, two official plugins are available:
+## 特性
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Markdown 文章支持** - 使用 Markdown 编写内容，自动解析 Front Matter 元数据
+- **分类筛选** - 支持按文章分类筛选
+- **年份筛选** - 支持按发布年份筛选
+- **搜索功能** - 支持标题和摘要搜索，带清除按钮
+- **分页浏览** - 每页显示 6 篇文章，支持翻页
+- **互动功能** - 文章页支持喜欢、收藏、分享（复制链接）
+- **响应式设计** - 适配桌面端和移动端
+- **localStorage 持久化** - 喜欢和收藏数据保存在本地
 
-## React Compiler
+## 技术栈
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **前端框架**: React 19
+- **构建工具**: Vite
+- **语言**: TypeScript
+- **样式**: Tailwind CSS 4
+- **路由**: React Router DOM
+- **Markdown**: react-markdown + remark-gfm
+- **文章解析**: gray-matter
+- **图标**: Lucide React
+- **动画**: Framer Motion
 
-## Expanding the ESLint configuration
+## 快速开始
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 安装依赖
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 开发模式
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+访问 http://localhost:5173
+
+### 构建生产版本
+
+```bash
+npm run build
+```
+
+### 预览生产版本
+
+```bash
+npm run preview
+```
+
+## 添加新文章
+
+在 `src/articles/` 目录下创建新的 `.md` 文件：
+
+```markdown
+---
+title: 文章标题
+date: 2025-04-10
+category: 读书
+author: 作者名
+coverImage: /path/to/image.jpg
+excerpt: 文章摘要
+---
+
+这里是文章内容...
+```
+
+Front Matter 字段说明：
+
+| 字段 | 必填 | 说明 |
+|------|------|------|
+| `title` | 是 | 文章标题 |
+| `date` | 是 | 发布日期，格式：YYYY-MM-DD |
+| `category` | 是 | 文章分类 |
+| `author` | 否 | 作者名，默认：匿名 |
+| `coverImage` | 否 | 封面图片路径 |
+| `excerpt` | 否 | 文章摘要 |
+
+## 项目结构
+
+```
+src/
+├── articles/          # Markdown 文章
+├── components/        # React 组件
+│   ├── ArticleCard.tsx
+│   ├── Navigation.tsx
+│   └── ...
+├── pages/             # 页面组件
+│   ├── Home.tsx
+│   ├── Blog.tsx
+│   └── ArticleDetail.tsx
+├── utils/             # 工具函数
+│   └── articles.ts    # 文章数据处理
+├── App.tsx
+├── main.tsx
+└── index.css
+```
+
+## 许可证
+
+MIT
